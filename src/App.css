@@ -1,56 +1,194 @@
+/* ===== GLOBAL STYLES ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 20px;
+}
+
+/* ===== APP LAYOUT ===== */
 .app {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-h1 {
+.app h1 {
   text-align: center;
-  color: #333;
+  margin-bottom: 30px;
+  color: #2c3e50;
 }
+
+/* ===== FORM STYLES ===== */
 .expense-form {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
 }
 
 .expense-form h2 {
-  margin-bottom: 20px;
-  color: #444;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  text-align: center;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   font-weight: 500;
+  color: #495057;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
   font-size: 16px;
+  transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.form-group.has-error input {
+  border-color: #dc3545;
+}
+
+.form-group.has-error input:focus {
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  display: block;
 }
 
 .submit-btn {
   background-color: #4CAF50;
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
+  padding: 14px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
   width: 100%;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
 .submit-btn:hover {
-  background-color: #45a049;
+  background-color: #3e8e41;
+}
+
+/* ===== EXPENSE LIST STYLES ===== */
+.expenses-list {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+.expenses-list h2 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.no-expenses {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.expenses-list ul {
+  list-style: none;
+}
+
+.expenses-list li {
+  padding: 15px 0;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expenses-list li:last-child {
+  border-bottom: none;
+}
+
+.expense-title {
+  font-weight: 500;
+  color: #212529;
+}
+
+.expense-category {
+  font-size: 0.8rem;
+  background: #e9ecef;
+  color: #495057;
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+.expense-amount {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.expense-date {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-left: 15px;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 600px) {
+  body {
+    padding: 15px;
+  }
+
+  .app {
+    padding: 0;
+  }
+
+  .expenses-list li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .expense-category {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+
+  .expense-date {
+    margin-left: 0;
+    margin-top: 5px;
+  }
 }

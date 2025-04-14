@@ -1,91 +1,140 @@
 import { useState } from 'react';
 
 const ExpenseForm = ({ onAddExpense }) => {
-  const [title, setTitle] = useState('');
-  const [amount, setAmount] = useState('');
-  const [date, setDate] = useState('');
-  const [category, setCategory] = useState('food');
+  const [formData, setFormData] = useState({
+    title: '',
+    amount: '',
+    date: '',
+    category: 'food'
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const categories = [
+    { value: 'food', label: 'Food' },
+    { value: 'transport', label: 'Transport' },
+    { value: 'housing', label: 'Housing' },
+    { value: 'entertainment', label: 'Entertainment' },
+    { value: 'shopping', label: 'Shopping' },
+    { value: 'other', label: 'Other' }
+  ];
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user types
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.title.trim()) newErrors.title = 'Title is required';
+    if (!formData.amount) newErrors.amount = 'Amount is required';
+    if (isNaN(formData.amount) || parseFloat(formData.amount) <= 0) {
+      newErrors.amount = 'Must be a positive number';
+    }
+    if (!formData.date) newErrors.date = 'Date is required';
+    return newErrors;
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      amount: '',
+      date: '',
+      category: 'food'
+    });
+    setErrors({});
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationErrors = validate();
 
-    if (!title || !amount || !date) {
-      alert('Please fill in all fields');
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    const newExpense = {
+    onAddExpense({
       id: Date.now(),
-      title,
-      amount: parseFloat(amount),
-      date: new Date(date),
-      category
-    };
+      ...formData,
+      amount: parseFloat(formData.amount),
+      date: new Date(formData.date)
+    });
 
-    onAddExpense(newExpense);
-
-    // Reset form
-    setTitle('');
-    setAmount('');
-    setDate('');
-    setCategory('food');
+    resetForm();
   };
 
   return (
     <form onSubmit={handleSubmit} className="expense-form">
       <h2>Add New Expense</h2>
 
-      <div className="form-group">
+      <div className={`form-group ${errors.title ? 'has-error' : ''}`}>
         <label htmlFor="title">Title</label>
         <input
           type="text"
           id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
           placeholder="e.g. Groceries"
         />
+        {errors.title && <span className="error-message">{errors.title}</span>}
       </div>
 
-      <div className="form-group">
-        <label htmlFor="amount">Amount</label>
+      <div className={`form-group ${errors.amount ? 'has-error' : ''}`}>
+        <label htmlFor="amount">Amount ($)</label>
         <input
           type="number"
           id="amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          name="amount"
+          value={formData.amount}
+          onChange={handleChange}
           placeholder="0.00"
           min="0.01"
           step="0.01"
         />
+        {errors.amount && <span className="error-message">{errors.amount}</span>}
       </div>
 
-      <div className="form-group">
+      <div className={`form-group ${errors.date ? 'has-error' : ''}`}>
         <label htmlFor="date">Date</label>
         <input
           type="date"
           id="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          max={new Date().toISOString().split('T')[0]}
         />
+        {errors.date && <span className="error-message">{errors.date}</span>}
       </div>
 
       <div className="form-group">
         <label htmlFor="category">Category</label>
         <select
           id="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
         >
-          <option value="food">Food</option>
-          <option value="transport">Transport</option>
-          <option value="housing">Housing</option>
-          <option value="entertainment">Entertainment</option>
-          <option value="shopping">Shopping</option>
-          <option value="other">Other</option>
+          {categories.map(cat => (
+            <option key={cat.value} value={cat.value}>
+              {cat.label}
+            </option>
+          ))}
         </select>
       </div>
 
-      <button type="submit" className="submit-btn">Add Expense</button>
+      <button type="submit" className="submit-btn">
+        Add Expense
+      </button>
     </form>
   );
 };
