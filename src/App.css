@@ -1,3 +1,28 @@
+/* Delete Button Styles */
+.delete-btn {
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
+}
+
+.delete-btn:active {
+  background-color: #990000;
+}
+
+.delete-btn:focus {
+  outline: 2px solid #ff9999;
+  outline-offset: 2px;
+}
+
 /* ===== GLOBAL STYLES ===== */
 * {
   box-sizing: border-box;
