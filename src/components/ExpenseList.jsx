@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 const ExpenseList = () => {
   const { expenses, deleteExpense } = useExpenseStore();
-  const [sortBy, setSortBy] = useState('date-desc');
+  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
   const [filterCategory, setFilterCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -18,16 +18,43 @@ const ExpenseList = () => {
       return matchesCategory && matchesSearch;
     })
     .sort((a, b) => {
-      if (sortBy === 'date-desc') return new Date(b.date) - new Date(a.date);
-      if (sortBy === 'date-asc') return new Date(a.date) - new Date(b.date);
-      if (sortBy === 'amount-desc') return b.amount - a.amount;
-      if (sortBy === 'amount-asc') return a.amount - b.amount;
-      if (sortBy === 'category-asc') return a.category.localeCompare(b.category);
-      if (sortBy === 'category-desc') return b.category.localeCompare(a.category);
-      if (sortBy === 'title-asc') return a.title.localeCompare(b.title);
-      if (sortBy === 'title-desc') return b.title.localeCompare(a.title);
+      if (sortConfig.key === 'date') {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA;
+      }
+      if (sortConfig.key === 'amount') {
+        return sortConfig.direction === 'asc' ? a.amount - b.amount : b.amount - a.amount;
+      }
+      if (sortConfig.key === 'category') {
+        return sortConfig.direction === 'asc'
+          ? a.category.localeCompare(b.category)
+          : b.category.localeCompare(a.category);
+      }
+      if (sortConfig.key === 'title') {
+        return sortConfig.direction === 'asc'
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title);
+      }
       return 0;
     });
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIndicator = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === 'asc' ? '↑' : '↓';
+    }
+    return '';
+  };
+
+  const totalAmount = processedExpenses.reduce((sum, exp) => sum + exp.amount, 0);
 
   return (
     <div className="expenses-list">
@@ -54,61 +81,57 @@ const ExpenseList = () => {
             ))}
           </select>
         </div>
-
-        <div className="sort-control">
-          <label>Sort by:</label>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            <option value="date-desc">Date (Newest)</option>
-            <option value="date-asc">Date (Oldest)</option>
-            <option value="amount-desc">Amount (High)</option>
-            <option value="amount-asc">Amount (Low)</option>
-            <option value="category-asc">Category (A-Z)</option>
-            <option value="category-desc">Category (Z-A)</option>
-            <option value="title-asc">Description (A-Z)</option>
-            <option value="title-desc">Description (Z-A)</option>
-          </select>
-        </div>
       </div>
 
       {processedExpenses.length === 0 ? (
         <p className="no-expenses">No expenses found</p>
       ) : (
-        <table className="expense-table">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {processedExpenses.map(expense => (
-              <tr key={expense.id}>
-                <td>{expense.title}</td>
-                <td>{expense.category}</td>
-                <td>${expense.amount.toFixed(2)}</td>
-                <td>{new Date(expense.date).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric'
-                })}</td>
-                <td>
-                  <button
-                    onClick={() => deleteExpense(expense.id)}
-                    className="delete-btn"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <>
+          <table className="expense-table">
+            <thead>
+              <tr>
+                <th onClick={() => requestSort('title')} style={{ cursor: 'pointer' }}>
+                  Description {getSortIndicator('title')}
+                </th>
+                <th onClick={() => requestSort('category')} style={{ cursor: 'pointer' }}>
+                  Category {getSortIndicator('category')}
+                </th>
+                <th onClick={() => requestSort('amount')} style={{ cursor: 'pointer' }}>
+                  Amount {getSortIndicator('amount')}
+                </th>
+                <th onClick={() => requestSort('date')} style={{ cursor: 'pointer' }}>
+                  Date {getSortIndicator('date')}
+                </th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {processedExpenses.map(expense => (
+                <tr key={expense.id}>
+                  <td>{expense.title}</td>
+                  <td>{expense.category}</td>
+                  <td>${expense.amount.toFixed(2)}</td>
+                  <td>{new Date(expense.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}</td>
+                  <td>
+                    <button
+                      onClick={() => deleteExpense(expense.id)}
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="total-amount">
+            <strong>Total Amount: </strong>${totalAmount.toFixed(2)}
+          </div>
+        </>
       )}
     </div>
   );
