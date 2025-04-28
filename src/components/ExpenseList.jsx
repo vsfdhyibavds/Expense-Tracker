@@ -76,36 +76,39 @@ const ExpenseList = () => {
       {processedExpenses.length === 0 ? (
         <p className="no-expenses">No expenses found</p>
       ) : (
-        <ul>
-          {processedExpenses.map(expense => (
-            <li key={expense.id}>
-              <div className="expense-info">
-                <span className="expense-title">{expense.title}</span>
-                <span className={`expense-category ${expense.category}`}>
-                  {expense.category}
-                </span>
-              </div>
-              <div className="expense-meta">
-                <span className="expense-amount">
-                  ${expense.amount.toFixed(2)}
-                </span>
-                <span className="expense-date">
-                  {new Date(expense.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                  })}
-                </span>
-                <button
-                  onClick={() => deleteExpense(expense.id)}
-                  className="delete-btn"
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <table className="expense-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {processedExpenses.map(expense => (
+              <tr key={expense.id}>
+                <td>{expense.title}</td>
+                <td>{expense.category}</td>
+                <td>${expense.amount.toFixed(2)}</td>
+                <td>{new Date(expense.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}</td>
+                <td>
+                  <button
+                    onClick={() => deleteExpense(expense.id)}
+                    className="delete-btn"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
