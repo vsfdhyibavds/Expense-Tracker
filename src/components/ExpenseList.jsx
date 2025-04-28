@@ -14,7 +14,7 @@ const ExpenseList = () => {
   const processedExpenses = expenses
     .filter(exp => {
       const matchesCategory = filterCategory === 'all' || exp.category === filterCategory;
-      const matchesSearch = exp.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = exp.description.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;
     })
     .sort((a, b) => {
@@ -31,10 +31,10 @@ const ExpenseList = () => {
           ? a.category.localeCompare(b.category)
           : b.category.localeCompare(a.category);
       }
-      if (sortConfig.key === 'title') {
+      if (sortConfig.key === 'description') {
         return sortConfig.direction === 'asc'
-          ? a.title.localeCompare(b.title)
-          : b.title.localeCompare(a.title);
+          ? a.description.localeCompare(b.description)
+          : b.description.localeCompare(a.description);
       }
       return 0;
     });
@@ -90,8 +90,8 @@ const ExpenseList = () => {
           <table className="expense-table">
             <thead>
               <tr>
-                <th onClick={() => requestSort('title')} style={{ cursor: 'pointer' }}>
-                  Description {getSortIndicator('title')}
+                <th onClick={() => requestSort('description')} style={{ cursor: 'pointer' }}>
+                  Description {getSortIndicator('description')}
                 </th>
                 <th onClick={() => requestSort('category')} style={{ cursor: 'pointer' }}>
                   Category {getSortIndicator('category')}
@@ -108,7 +108,7 @@ const ExpenseList = () => {
             <tbody>
               {processedExpenses.map(expense => (
                 <tr key={expense.id}>
-                  <td>{expense.title}</td>
+                  <td>{expense.description}</td>
                   <td>{expense.category}</td>
                   <td>${expense.amount.toFixed(2)}</td>
                   <td>{new Date(expense.date).toLocaleDateString('en-US', {

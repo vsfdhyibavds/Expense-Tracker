@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const ExpenseForm = ({ onAddExpense }) => {
   const [formData, setFormData] = useState({
-    title: '',
+    description: '',
     amount: '',
     date: '',
     category: 'food'
@@ -33,7 +33,7 @@ const ExpenseForm = ({ onAddExpense }) => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.title.trim()) newErrors.title = 'Title is required';
+    if (!formData.description.trim()) newErrors.description = 'Description is required';
     if (!formData.amount) newErrors.amount = 'Amount is required';
     if (isNaN(formData.amount) || parseFloat(formData.amount) <= 0) {
       newErrors.amount = 'Must be a positive number';
@@ -44,7 +44,7 @@ const ExpenseForm = ({ onAddExpense }) => {
 
   const resetForm = () => {
     setFormData({
-      title: '',
+      description: '',
       amount: '',
       date: '',
       category: 'food'
@@ -75,17 +75,17 @@ const ExpenseForm = ({ onAddExpense }) => {
     <form onSubmit={handleSubmit} className="expense-form">
       <h2>Add New Expense</h2>
 
-      <div className={`form-group ${errors.title ? 'has-error' : ''}`}>
-        <label htmlFor="title">Title</label>
+      <div className={`form-group ${errors.description ? 'has-error' : ''}`}>
+        <label htmlFor="description">Description</label>
         <input
           type="text"
-          id="title"
-          name="title"
-          value={formData.title}
+          id="description"
+          name="description"
+          value={formData.description}
           onChange={handleChange}
           placeholder="e.g. Groceries"
         />
-        {errors.title && <span className="error-message">{errors.title}</span>}
+        {errors.description && <span className="error-message">{errors.description}</span>}
       </div>
 
       <div className={`form-group ${errors.amount ? 'has-error' : ''}`}>
