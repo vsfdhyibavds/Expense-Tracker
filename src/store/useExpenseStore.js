@@ -41,6 +41,8 @@ export const useExpenseStore = create(
       },
 
       logout: () => {
+        console.log('Logout called');
+        localStorage.removeItem('expense-storage');
         const { user, expenses, users } = get();
         if (user) {
           users[user.username].expenses = expenses;
