@@ -28,10 +28,10 @@ h1 {
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .auth-form h2 {
-  text-align: center;
   color: #2c3e50;
   margin-bottom: 1.5rem;
 }
@@ -51,6 +51,7 @@ h1 {
 .auth-form label {
   font-weight: 600;
   color: #34495e;
+  text-align: left;
 }
 
 .auth-form input {
@@ -84,7 +85,7 @@ h1 {
   background-color: #2980b9;
 }
 
-.auth-form button:not([type="submit"]) {
+.toggle-auth {
   background: none;
   border: none;
   color: #3498db;
@@ -97,12 +98,31 @@ h1 {
   transition: color 0.3s ease;
 }
 
-.auth-form button:not([type="submit"]):hover {
+.toggle-auth:hover {
   color: #2980b9;
   text-decoration: underline;
 }
 
-.auth-form .error {
+.logout-button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.error {
   color: #e74c3c;
   background-color: #fadbd8;
   padding: 0.8rem;
